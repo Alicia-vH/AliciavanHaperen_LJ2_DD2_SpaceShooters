@@ -8,6 +8,6 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models.Interface
 {
     public interface IAgressive
     {
-        
+       protected int AttackDamage { get; }
     }
 }

@@ -19,9 +19,36 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models
         }
         #endregion
 
-        protected int id;
-        protected int HealthPoints;
-        protected int Score;
-        protected TimeSpan ElapsedTime;
+        private int id;
+        private int healthPoints;
+        private int score;
+        private  TimeSpan elapsedTime;
+
+        public int Id 
+        { 
+            get { return id; } 
+            set { id = value; OnPropertyChanged(); } 
+        }
+
+        public int HealthPoints
+        {
+            get { return healthPoints; }
+            set { healthPoints = value; OnPropertyChanged(); }
+        }
+
+        public int Score
+        {
+            get { return score; }
+            set { score = value; OnPropertyChanged(); }
+        }
+
+        public TimeSpan ElapsedTime
+        {
+            get { return elapsedTime; }
+            set { elapsedTime = value; OnPropertyChanged(); }
+        }
+
+        public PlayerModel PlayerModel { get; set; }
+
     }
 }

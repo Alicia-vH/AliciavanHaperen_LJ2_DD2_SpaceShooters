@@ -9,5 +9,13 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models.Enemy
 {
     public class EnemyGray2 : EnemyShip
     {
+        public EnemyGray2(int attackDamage, string spaceShipImage, float speed) : base(attackDamage, spaceShipImage, speed)
+        {
+        }
+
+        public override string EnemyDescription()
+        {
+            return "I am enemy Gray 2";
+        }
     }
 }

@@ -23,7 +23,5 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         {
             InitializeComponent();
         }
-
-       
     }
 }

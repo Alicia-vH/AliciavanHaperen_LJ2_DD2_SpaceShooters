@@ -8,11 +8,11 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models.Ship
 {
     abstract public class SpaceShip
     {
-        protected float Speed;
+        public float Speed { get; }
 
         public SpaceShip(float speed) 
         {
-          
+            Speed = speed;
         } 
 
     }

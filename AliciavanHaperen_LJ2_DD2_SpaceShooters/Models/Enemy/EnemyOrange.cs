@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models.Enemy
 {
     public class EnemyOrange : EnemyShip
-
-
     {
+        public EnemyOrange(int attackDamage, string spaceShipImage, float speed) : base(attackDamage, spaceShipImage, speed)
+        {
+        }
+
+        public override string EnemyDescription()
+        {
+            return "I am enemy Orange";
+        }
     }
 }

@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AliciavanHaperen_LJ2_DD2_SpaceShooters.Views"
         mc:Ignorable="d"
-        Title="GameMenuWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="GameMenuWindow" Height="450" Width="800"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+
+    <Border CornerRadius="15"
+        BorderThickness="5">
+        <Border.Background>
+            <LinearGradientBrush>
+                <GradientStop Color="Purple"/>
+                <GradientStop Color="Orange" Offset="0.5"/>
+                <GradientStop Color="Black" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+
+        <!--Hieronder de inhoud van de Standaard Grid -->
+        <Grid MouseDown="Windows_MouseDown">
+            <TextBlock HorizontalAlignment="Left" Margin="27,10,0,0" TextWrapping="Wrap" Text="Space Shooters" FontWeight="Bold" FontSize="35" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="27,157,0,0" TextWrapping="Wrap" Text="New Player:" FontWeight="Bold" FontSize="15" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="27,193,0,0" TextWrapping="Wrap" Text="Existing Player:" FontWeight="Bold" FontSize="15" VerticalAlignment="Top" RenderTransformOrigin="0.48,1.204"/>
+            <TextBox HorizontalAlignment="Left" Margin="152,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="600" Height="25" Text="{Binding NewPlayer.Name}"/>
+            <ComboBox HorizontalAlignment="Left" Margin="152,192,0,0" VerticalAlignment="Top" Width="600" Height="28"/>
+            <Button Content="Play Game" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Margin="27,272,0,0" VerticalAlignment="Top" Width="177" Height="33" Click="BtnPlayGame_Click"/>
+            <Button Content="Tournaments" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Margin="603,272,0,0" VerticalAlignment="Top" Width="177" Height="33"/>
+
+        </Grid>
+
+    </Border>
+
+
 </Window>
