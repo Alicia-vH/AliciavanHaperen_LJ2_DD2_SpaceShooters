@@ -51,6 +51,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         public GameMenuWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         private void Windows_MouseDown(object sender, MouseButtonEventArgs e)
@@ -70,14 +71,12 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
                 MessageBox.Show("Please choose a player name.");
                 return;
             }
-            else
-            {
-                PlayerModel playerModel = new(200, PlayerName);
-                GameWindow gameWindow = new(playerModel);
-                gameWindow.Show();
-                this.Close();
-            }
             #endregion
+
+            PlayerModel playerModel = new(200, PlayerName);
+            GameWindow gameWindow = new(playerModel);
+            gameWindow.Show();
+            this.Close();
         }
     }
 }

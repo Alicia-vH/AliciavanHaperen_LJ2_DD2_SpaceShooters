@@ -48,7 +48,6 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models
             set { elapsedTime = value; OnPropertyChanged(); }
         }
 
-        public PlayerModel PlayerModel { get; set; }
-
+        public PlayerModel? PlayerModel { get; set; }
     }
 }

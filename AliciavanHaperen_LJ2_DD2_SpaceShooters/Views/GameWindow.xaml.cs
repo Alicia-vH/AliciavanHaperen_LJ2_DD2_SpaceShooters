@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,14 +37,22 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         }
         #endregion
 
-        #region Properties
+        #region Fields
 
-        private ObservableCollection<PlayerModel> players = new();
+
         private bool leftKeyPressed;
         private bool rightKeyPressed;
         private bool upKeyPressed;
         private bool downKeyPressed;
         private bool spaceKeyPressed;
+        private readonly double enemySpawnRate = 350;
+        private readonly Random random = new Random();
+
+        #endregion
+
+        #region Properties
+
+        private ObservableCollection<PlayerModel> players = new();
 
         public ObservableCollection<PlayerModel> Players
         {
@@ -54,26 +63,52 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         public GameModel GameModel { get; set; }
         private PlayerShip playerShip { get; set; }
-
-
-
         #endregion
 
-        
+        private readonly long startTime;
+
+        private readonly DispatcherTimer gameTimer = new();
+
+        private readonly Stopwatch enemyStopWatch = new();
+
+        private readonly Stopwatch bulletStopWatch = new();
+
 
         public GameWindow(PlayerModel playerModel)
         {
             InitializeComponent();
-            GameModel = new GameModel() { PlayerModel = playerModel };
 
+            DataContext = this;
+
+            #region Initialisatie
             GameModel = new() { PlayerModel = playerModel, HealthPoints = 200 };
 
-            playerShip = new(fireRate: 200, friction: 0.92f, speed: 1.75f);
+            playerShip = new(fireRate: 100, friction: 0.92f, speed: 1.75f);
 
 
             Canvas.SetLeft(PlayerShape, SystemParameters.PrimaryScreenWidth / 2);
             Canvas.SetBottom(PlayerShape, PlayerShape.Height);
 
+            GameCanvas.Focus();
+
+            #endregion
+
+
+            #region Verwerking
+            startTime = Stopwatch.GetTimestamp();
+
+            gameTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);
+            gameTimer.Tick += GameLoop;
+            gameTimer.Start();
+
+            enemyStopWatch.Start();
+            bulletStopWatch.Start();
+
+            #endregion
+        }
+
+        private void GameLoop(object? sender, EventArgs e)
+        {
             GameModel.ElapsedTime = Stopwatch.GetElapsedTime(startTime);
 
             List<Rectangle> enemies =
@@ -85,7 +120,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
             DrawEnemy();
 
-            DrawBullet();
+            //DrawBullet();
 
             ProcesPlayerInteraction();
 
@@ -94,8 +129,6 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
             CheckGameOver();
 
             Reset(enemies, bullets);
-
-           
         }
 
         private void Reset(List<Rectangle> enemies, List<Rectangle> bullets)
@@ -131,7 +164,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         private void CheckGameOver()
         {
-            //Maak code hiervoor
+            
         }
 
         private void UpdateEnemy(List<Rectangle> enemies, List<Rectangle> bullets)
@@ -221,11 +254,11 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         private void DrawEnemy()
         {
-          
-
             double deltaTime = enemyStopWatch.ElapsedMilliseconds;
             if (deltaTime > enemySpawnRate)
             {
+                int randomEnemyIndex = random.Next(enemyShips.Count);
+
                 EnemyShip randomEnemy = enemyShips[randomEnemyIndex];
 
                 ImageBrush enemySprite = randomEnemy.SpaceShipImage;
@@ -281,7 +314,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         #endregion
 
         #region Enemies
-        private const string assetLocation = "pack://application:,,,/Assets";
+        private const string assetLocation = "pack://application:,,,/assets";
         private readonly List<EnemyShip> enemyShips = new()
         {
             new EnemyGray(attackDamage: 5,
@@ -295,29 +328,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         };
         #endregion
 
-     
-        #region Verwerking
 
-        startTime = Stopwatch.GetTimestamp();
-
-        gameTimer.Interval = TimeSpan.FromMilliseconds(1000 / 60);
-        gameTimer.Tick += GameLoop;
-        gameTimer.Start();
-
-        enemyStopWatch.Start();
-        bulletStopWatch.Start();
-
-        
-        private readonly Stopwatch startTime = new();
-
-        private readonly DispatcherTimer gameTimer = new();
-
-        private readonly Stopwatch enemyStopWatch = new();
-
-        private readonly Stopwatch bulletStopWatch = new();
-
-
-        #endregion
 
         public void OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -372,4 +383,3 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
     }
 }
-  

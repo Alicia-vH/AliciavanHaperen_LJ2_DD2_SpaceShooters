@@ -7,7 +7,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models.Ship
 {
     abstract public class EnemyShip : SpaceShip, IAgressive
     {
-        public ImageBrush SpaceShipImage { get; }
+        public ImageBrush SpaceShipImage { get; set; }
         public int AttackDamage { get; set; }
 
         int IAgressive.AttackDamage => 200;

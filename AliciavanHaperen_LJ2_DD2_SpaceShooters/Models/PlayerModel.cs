@@ -28,9 +28,9 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models
             set { id = value; OnPropertyChanged(); }
         }
 
-        private string name;
+        private string? name;
 
-        public string Name
+        public string? Name
         {
             get { return name; }
             set { name = value; OnPropertyChanged(); }

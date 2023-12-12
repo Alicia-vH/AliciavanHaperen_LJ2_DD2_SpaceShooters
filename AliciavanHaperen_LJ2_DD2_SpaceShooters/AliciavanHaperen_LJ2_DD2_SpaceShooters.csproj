@@ -8,7 +8,54 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <None Remove="assets\Background.png" />
+    <None Remove="assets\EnemySpriteFour.png" />
+    <None Remove="assets\EnemySpriteOne.png" />
+    <None Remove="assets\EnemySpriteThree.png" />
+    <None Remove="assets\EnemySpriteTwo.png" />
+    <None Remove="assets\GalaxyCupLogo.png" />
+    <None Remove="assets\PlayerSprite.png" />
+    <None Remove="assets\SpaceShooterIcon.png" />
+    <None Remove="assets\TrophyIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\Background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\EnemySpriteFour.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\EnemySpriteOne.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\EnemySpriteThree.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\EnemySpriteTwo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\GalaxyCupLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\PlayerSprite.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\SpaceShooterIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="assets\TrophyIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Models\Enemy\EnemyGray2.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Models\Enemy\EnemyGreen.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>
