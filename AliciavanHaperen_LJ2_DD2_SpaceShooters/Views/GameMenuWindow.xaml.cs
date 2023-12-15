@@ -24,7 +24,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
     /// </summary>
     public partial class GameMenuWindow : Window, INotifyPropertyChanged
     {
-
+        // INotifyPropertyChanged
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
@@ -33,16 +33,8 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         }
         #endregion
 
-        #region Properties
-
-        private ObservableCollection<PlayerModel> players = new();
-
-        public ObservableCollection<PlayerModel> Players
-        {
-            get { return players; }
-            set { players = value; OnPropertyChanged(); }
-            
-        }
+        // Naam van de player
+        #region PlayerName
 
         public string PlayerName { get; set; } = string.Empty;
 
@@ -62,8 +54,10 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
             }
         }
 
+        // Verwijst naar de GameWindow
         private void BtnPlayGame_Click(object sender, RoutedEventArgs e)
         {
+            // Controleert de naam invoer
             #region Controleer invoer gebruiker
             // naam moet gevuld zijn
             if (PlayerName == "")
@@ -73,10 +67,32 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
             }
             #endregion
 
+            // Gegevens die wordt meegegeven naar de andere window voor de player
+            #region Gegevens Player, verwijzing naar andere window
             PlayerModel playerModel = new(200, PlayerName);
             GameWindow gameWindow = new(playerModel);
             gameWindow.Show();
             this.Close();
+            #endregion
+        }
+
+        // Sluit dit scherm of blijft
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
+        {
+            //Confirmation
+            MessageBoxResult result = MessageBox.Show($"Are you sure you want to leave?", "Exit", MessageBoxButton.YesNo);
+            //Ja of nee knoppen en hun functies
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    MessageBox.Show("See you soon, Captain!", "Exit");
+                    this.Close();
+                    break;
+                case MessageBoxResult.No:
+                    MessageBox.Show("Ok!", "Exit");
+                    break;
+
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
     /// </summary>
     public partial class GameWindow : Window, INotifyPropertyChanged
     {
-
+        // INotifyPropertyChanged
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
@@ -37,9 +37,8 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
         }
         #endregion
 
-        #region Fields
-
-
+        // Controls, Random and enemySpawnRate
+        #region Controls, Random and enemySpawnRate
         private bool leftKeyPressed;
         private bool rightKeyPressed;
         private bool upKeyPressed;
@@ -50,21 +49,24 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         #endregion
 
-        #region Properties
+        // Model, Name and Ship
+        #region Model, Name and Ship
 
-        private ObservableCollection<PlayerModel> players = new();
+        private GameModel _gameModel;
 
-        public ObservableCollection<PlayerModel> Players
+        public GameModel GameModel
         {
-            get { return players; }
-            set { players = value; OnPropertyChanged(); }
-
+            get { return _gameModel; }
+            set { _gameModel = value; }
         }
 
-        public GameModel GameModel { get; set; }
+        public string PlayerName { get; set; }
+
         private PlayerShip playerShip { get; set; }
         #endregion
 
+        // Timers and Stopwatches
+        #region Timers and Stopwatches
         private readonly long startTime;
 
         private readonly DispatcherTimer gameTimer = new();
@@ -73,15 +75,42 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         private readonly Stopwatch bulletStopWatch = new();
 
+        #endregion
+
+        // Settings voor het veld
+        #region PlayingField
+        private const int boundary = 20;
+        private readonly int leftBorder = boundary;
+        private readonly int topBorder = (int)(SystemParameters.PrimaryScreenHeight - boundary - 60);
+        private readonly int rightBorder = (int)(SystemParameters.PrimaryScreenWidth - boundary - 60);
+        private readonly int bottomBorder = boundary;
+        #endregion
+
+        // Zorgt ervoor dat de foto's ingeladen worden
+        #region Enemies
+        private const string assetLocation = "pack://application:,,,/assets";
+        private readonly List<EnemyShip> enemyShips = new()
+        {
+            new EnemyGray(attackDamage: 5,
+                spaceShipImage : $"{assetLocation}/enemySpriteOne.png", speed: 20),
+            new EnemyGray2(attackDamage: 10,
+                spaceShipImage : $"{assetLocation}/enemySpriteTwo.png", speed: 10),
+            new EnemyGreen(attackDamage: 15,
+                spaceShipImage : $"{assetLocation}/enemySpriteThree.png", speed: 5),
+            new EnemyOrange(attackDamage: 20,
+                spaceShipImage : $"{assetLocation}/enemySpriteFour.png", speed: 10)
+        };
+        #endregion
 
         public GameWindow(PlayerModel playerModel)
         {
+            // Initalisatie
+            #region Initialisatie
             InitializeComponent();
 
             DataContext = this;
 
-            #region Initialisatie
-            GameModel = new() { PlayerModel = playerModel, HealthPoints = 200 };
+            _gameModel = new() { PlayerModel = playerModel, HealthPoints = 200 };
 
             playerShip = new(fireRate: 100, friction: 0.92f, speed: 1.75f);
 
@@ -93,7 +122,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
             #endregion
 
-
+            // Verwerking Stopwatches
             #region Verwerking
             startTime = Stopwatch.GetTimestamp();
 
@@ -107,6 +136,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
             #endregion
         }
 
+        // Game in een loop
         private void GameLoop(object? sender, EventArgs e)
         {
             GameModel.ElapsedTime = Stopwatch.GetElapsedTime(startTime);
@@ -118,19 +148,28 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
             GameCanvas.Children.OfType<Rectangle>()
             .Where(r => r.Tag is string && r.Tag.ToString() == "bullet").ToList();
 
-            DrawEnemy();
+            try
+            {
+                DrawEnemy();
 
-            //DrawBullet();
+                //DrawBullet();
 
-            ProcesPlayerInteraction();
+                ProcesPlayerInteraction();
 
-            UpdateEnemy(enemies, bullets);
+                UpdateEnemy(enemies, bullets);
 
-            CheckGameOver();
+                CheckGameOver();
 
-            Reset(enemies, bullets);
+                Reset(enemies, bullets);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Error in Gameloop: {ex.Message}");
+            }
+            
         }
 
+        // Reset de game
         private void Reset(List<Rectangle> enemies, List<Rectangle> bullets)
         {
             foreach (Rectangle enemy in enemies)
@@ -162,11 +201,42 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         }
 
+        // Controleert of je verloren hebt, geeft je daarna een keuze om nog een rondje te spelen of te gaan
         private void CheckGameOver()
         {
-            
+            if (GameModel.HealthPoints <= 0)
+            {
+                GameModel.HealthPoints = 0;
+                //Message
+                MessageBoxResult result = MessageBox.Show($"Captain {_gameModel.PlayerModel.Name}, you destroyed {GameModel.Score} ships. Do you want to play again?", "Game Over", MessageBoxButton.YesNo);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        gameTimer.Stop();
+                        enemyStopWatch.Stop();
+                        bulletStopWatch.Stop();
+                        MessageBox.Show("Ok!", "Game Over");
+                        PlayerModel playerModel = new(200, _gameModel.PlayerModel.Name);
+                        GameWindow gameWindow = new(playerModel);
+                        gameWindow.Show();
+                        this.Close();
+                        break;
+                    case MessageBoxResult.No:
+                        gameTimer.Stop();
+                        enemyStopWatch.Stop();
+                        bulletStopWatch.Stop();
+                        MessageBox.Show("Oh well, too bad!", "Game Over");
+                        new GameMenuWindow().Show();
+                        this.Close();
+                        break;
+                    
+                }
+
+
+            }
         }
 
+        // Als de player of enemy's hitbox wordt geraakt, update deze method de situatie
         private void UpdateEnemy(List<Rectangle> enemies, List<Rectangle> bullets)
         {
             foreach (Rectangle enemy in enemies)
@@ -203,6 +273,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         }
 
+        // Runt de player proces
         private void ProcesPlayerInteraction()
         {
             if (leftKeyPressed && Canvas.GetLeft(PlayerShape) > leftBorder)
@@ -252,6 +323,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         }
 
+        // Genereert nieuwe enemies
         private void DrawEnemy()
         {
             double deltaTime = enemyStopWatch.ElapsedMilliseconds;
@@ -280,6 +352,8 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
 
         }
+
+        // Genereert de bullets 
         private void DrawBullet()
         {
             double deltaTime = bulletStopWatch.ElapsedMilliseconds;
@@ -304,32 +378,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
 
         }
 
-
-        #region PlayingField
-        private const int boundary = 20;
-        private readonly int leftBorder = boundary;
-        private readonly int topBorder = (int)(SystemParameters.PrimaryScreenHeight - boundary - 60);
-        private readonly int rightBorder = (int)(SystemParameters.PrimaryScreenWidth - boundary - 60);
-        private readonly int bottomBorder = boundary;
-        #endregion
-
-        #region Enemies
-        private const string assetLocation = "pack://application:,,,/assets";
-        private readonly List<EnemyShip> enemyShips = new()
-        {
-            new EnemyGray(attackDamage: 5,
-                spaceShipImage : $"{assetLocation}/enemySpriteOne.png", speed: 20),
-            new EnemyGray2(attackDamage: 10,
-                spaceShipImage : $"{assetLocation}/enemySpriteTwo.png", speed: 10),
-            new EnemyGreen(attackDamage: 15,
-                spaceShipImage : $"{assetLocation}/enemySpriteThree.png", speed: 5),
-            new EnemyOrange(attackDamage: 20,
-                spaceShipImage : $"{assetLocation}/enemySpriteFour.png", speed: 10)
-        };
-        #endregion
-
-
-
+        // Voor de controls
         public void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left || e.Key == Key.A)
@@ -355,6 +404,7 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Views
             GameCanvas.Focus();
         }
 
+        // Voor de controls
         public void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left || e.Key == Key.A)

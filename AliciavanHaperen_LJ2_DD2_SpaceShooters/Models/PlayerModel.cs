@@ -28,12 +28,12 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models
             set { id = value; OnPropertyChanged(); }
         }
 
-        private string? name;
+        private string _name;
 
-        public string? Name
+        public string Name
         {
-            get { return name; }
-            set { name = value; OnPropertyChanged(); }
+            get { return _name; }
+            set { _name = value; OnPropertyChanged(); }
         }
 
         private int healthPoints;
@@ -54,8 +54,8 @@ namespace AliciavanHaperen_LJ2_DD2_SpaceShooters.Models
 
         public PlayerModel(int healthPoints, string name)
         {
-            HealthPoints = healthPoints;
-            Name = name;
+            this.healthPoints = healthPoints;
+            _name = name;
         }
 
 

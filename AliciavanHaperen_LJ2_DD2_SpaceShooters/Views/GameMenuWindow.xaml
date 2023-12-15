@@ -30,6 +30,7 @@
             <ComboBox HorizontalAlignment="Left" Margin="152,192,0,0" VerticalAlignment="Top" Width="600" Height="28"/>
             <Button Content="Play Game" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Margin="27,272,0,0" VerticalAlignment="Top" Width="177" Height="33" Click="BtnPlayGame_Click"/>
             <Button Content="Tournaments" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Margin="603,272,0,0" VerticalAlignment="Top" Width="177" Height="33"/>
+            <Button Content="Exit X" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Margin="731,0,0,0" VerticalAlignment="Top" Height="33" Width="59" Click="BtnExit_Click"/>
 
         </Grid>
 
